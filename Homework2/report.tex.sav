@@ -1,0 +1,263 @@
+\documentclass[a4paper, 11pt]{article}
+% ----- Loading the Package MCMthesis -----
+% -----           v 5.01-L            -----
+% `tcn' is short for `Team Control Number'.
+% You should fill your tcn after the equal sign following tcn.
+% The option `sheet' contorls weather the summary sheet
+% will appear.
+% The option `abstract' controls weather the abstract
+% will appear in the title-page.
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{diagbox}
+\usepackage{color}
+% ----- Question Mark -----
+% ----- Fonts settings -----
+% You may need to install the font files, if it's needed.
+% Disable it, if you don't want this font.
+\usepackage{palatino}
+\usepackage{geometry}% 能设置页边距
+\usepackage{setspace}% 能设置行距
+\usepackage{graphicx} %插入图形宏包
+\usepackage{float} %与插入图形有关 禁止图表的浮动[H]
+% ----- Set the skip betweent the paragraphics -----
+\setlength\parskip{.5\baselineskip}
+\setcounter{tocdepth}{4}
+% ----- The name of Abstract ------
+\providecommand{\abstractname}{\relax} % <-- Do not modify here.
+\renewcommand{\abstractname}{\Large Abstract} % <-- Modify here, if needed.
+% -----------------------------------
+% ===== The Title of Your Paper =====
+% -----------------------------------
+\newtheorem{law}{Law} %law 表明定理的名字，在输出中不显示，Law 表明定理的真实名字，在输出中显示 名称的替代？
+\newtheorem{jury}[law]{Jury} %表明以jury 为名称的定理与law 定理按同样顺序编号
+\newtheorem{mur}{Murphy}[section] %[section] 使加入的定理的编号与当前节链接
+\title{Solutions for HW2}
+% ---------------------------------------
+% ===== The Author(s) of Your Paper =====
+% ---------------------------------------
+\author{Yunhai Han}
+% ----------------
+% ===== Time =====
+% ----------------
+%首先 \begin{item} 是输出标号段落内容   \cite{} 能标号
+\begin{document}
+% Abstract should be put before `\maketitle'
+\maketitle
+\newgeometry{top=3cm,bottom=3cm,left=2cm,right=2cm} %全文页边距设置 4个方向 这个命令只能针对全文，与作用区域无关，即使在一个单独分组里？
+\pagestyle{empty}
+% Generate the Table of Contents, if it's needed.
+% \tableofcontents
+% \newpage
+% The body of your paper
+
+%====================== 问题介绍====================================
+\section{E2.1 Convexity}
+\subsection{i}
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=4cm,width=10cm]{convexset.png}
+\caption{Convex set(from lecture notes by Bullo and Smith)} \label{fig:convexset} %caption 即标题的意思
+\end{figure}
+A set $S$ is convex if for any two points $p$ and $q$ in $S$, the entire segment $\overline{pq}$ is also contained in $S$. Examples of convex set and non-convex set are drawn in Figure \ref{fig:convexset}.
+
+The advantage of convex sets over non-convex ones for motion planning is that if the start point and the goal point belong to the same convex set, then the segment joining the two points is an obstacle-free path, which makes the motion planning problem easier to deal with.
+\subsection{ii}
+\subsubsection{a}
+The intersection of any two overlapping convex sets is also convex.
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=6cm,width=6cm]{a.png}
+\caption{A sketch supporting my statement} \label{fig:a} %caption 即标题的意思
+\end{figure}
+From the above figure, the two circles represent two different convex sets. It is obvious that the segment joining any two points in the intersection of the two circles is still in the intersection.
+\subsubsection{b}
+The union of two convex sets is not convex, so the statement is false. The proof shows in the following figure.
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=6cm,width=6cm]{b.png}
+\caption{A sketch supporting my statement} \label{fig:b} %caption 即标题的意思
+\end{figure}
+The two points are in two different convex sets, so they are both in the union of the two sets. However, it is obvious the segment joining the two points is not wholly within the union.
+\subsubsection{c}
+This statement is true.
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=6cm,width=6cm]{c.png}
+\caption{A sketch supporting my statement} \label{fig:c} %caption 即标题的意思
+\end{figure}
+In the above figure, if we assume $p_1$ and $p_2$ are the two points which are closest to $q$, we could always find a new point $p$ which is even more closer to $q$ and this point unique(if it is not unique, we could do it again and find a new one). I describe the reasons in the next section.
+\subsubsection{d}
+If $Q$ is not convex, the property doesn't hold.
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=6cm,width=6cm]{d.png}
+\caption{A sketch supporting my statement} \label{fig:d} %caption 即标题的意思
+\end{figure}
+From the above figure, it is obvious that in such a case, there are two different points in $Q$ and the distance between point $q$ and each point $p$ are smaller than the distance point $q$ and any other points in $Q$.
+\subsubsection{e}
+The statement is false.
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=6cm,width=6cm]{e.png}
+\caption{A sketch supporting my statement} \label{fig:e} %caption 即标题的意思
+\end{figure}
+In the above figure, I draw a line tangent to a convex set and it doesn't contain any point in $Q$. It is obvious that $Q$ is not divided into two or more components. In other words, all the points in $Q$ are either on the left or the right of the line. In the other hand, I draw a line that divides $Q$ into two or more components and it could not be tangent to the $Q$ because it contains points in the interior of $Q$.
+\subsection{iii}
+\subsubsection{a}
+The reason is very simple: Take any two points $p, q$ in the intersection and by definition of intersection, they are also in each convex set. The line $\overline{pq}$ joining the two points must also lie wholly within each set. Hence it must lie wholly within their intersection. Hence, the statement is true.
+\subsubsection{c}
+I could use the contradiction method to prove it:
+
+First, I assume there exist more than one such points $q$ that the distance between between $p$ and $q$ are all smaller than the distance between  $p$ and any other points in the set.
+
+Then, I select any two points from all points $p$ and connect them. Since the two points are in a convex set, the segment joining the two points is also in the convex set. The midpoint of the segment is more closer to the point $q$ than the two selected points.
+
+Finally, I draw a new segment joining the point $q$ and the midpoint. The intersection of this segment and the boundary of the convex set is indeed what we want. If there are more than two candidates, we could implement this method iteratively(each time we need to select two different points from the group) and there would be only one point left after the final iteration. This point is what we really want to find and it is unique.
+
+And this is done in figure \ref{fig:c} to find the right point.
+\subsubsection{e}
+I could also use the contradiction method to prove it:
+First, I assume such a tangent line divides $Q$ into two or more components.
+
+Then, I could select two different points from two different components. Because the two points are in the convex set, the segment joining them are also in the convex set.
+
+The segment mush intersect with the tangent line due to the fact that the two points are on the different sides of the tangent line. The intersection point is either on the tangent line or in the convex set, which contradicts with the title(it says such a line does not contain any point in the interior of $Q$).
+
+Hence, the statement is false.
+\section{E2.5 Computing time complexity}
+From the hint, it assumes that addition, multiplication and division of two numbers all have unit cost.
+\subsection{i}
+\begin{itemize} %\itemize 是制作一个格式，一条一条的格式，编译见
+\item[1.] $a=0$
+\item[2.] for $i$ from 1 to $n$:
+\item[3.] \mbox{}\phantom{AAA}$a=a+1$
+\end{itemize}
+For the above programs, it would take $1+n$ operations required for execution. Hence, the time complexity is $O(n)$.
+\subsection{ii}
+\begin{itemize} %\itemize 是制作一个格式，一条一条的格式，编译见
+\item[1.] $a=0$
+\item[2.] for $i$ from 1 to 10:
+\item[3.] \mbox{}\phantom{AAA}$a=a+1$
+\end{itemize}
+For the above programs, it would take $1+10$ operations required for execution. Hence, the time complexity is $O(1)$, which means the running time would not increase with the scale.
+\subsection{iii}
+\begin{itemize} %\itemize 是制作一个格式，一条一条的格式，编译见
+\item[1.] $a=0$
+\item[2.] for $i$ from 1 to $n$:
+\item[3.] \mbox{}\phantom{AAA}$a=a+1$
+\item[2.] for $j$ from 1 to $n$:
+\item[3.] \mbox{}\phantom{AAA}$a=a+1$
+\end{itemize}
+For the above programs, it would take $1+2n$ operations required for execution. Hence, the time complexity is also $O(n)$.
+\subsection{iv}
+\begin{itemize} %\itemize 是制作一个格式，一条一条的格式，编译见
+\item[1.] $a=0$
+\item[2.] for $i$ from 1 to $n$:
+\item[3.] \mbox{}\phantom{AAA}for $j$ from 1 to $n$:
+\item[4.] \mbox{}\phantom{AAAAAA}$a=a+1$
+\end{itemize}
+For the above programs, it would take $1+n*n$ operations required for execution. Hence, the time complexity is also $O(n^2)$.
+\subsection{v}
+\begin{itemize} %\itemize 是制作一个格式，一条一条的格式，编译见
+\item[1.] $a=0$
+\item[2.] for $i$ from 1 to $n$:
+\item[3.] \mbox{}\phantom{AAA}for $j$ from i to $n$:
+\item[4.] \mbox{}\phantom{AAAAAA}$a=a+1$
+\end{itemize}
+For the above programs, it would take $1+\sum^{n}_{i=1}(n+1-i)=1+\frac{n^2+n}{2}$ operations required for execution. Hence, the time complexity is also $O(n^2)$.
+\subsection{vi}
+\begin{itemize} %\itemize 是制作一个格式，一条一条的格式，编译见
+\item[1.] $a=n$
+\item[2.] while $a \geq 1$:
+\item[3.] \mbox{}\phantom{AAA}$a=a/2$
+\end{itemize}
+For the above programs, it would take $1+\lceil 2\log n \rceil+1$ operations required for execution. I assume the base of $\log n$ is 2 and n is larger than 1. Here, I give a brief explanation of the expression:
+
+At first, we initialize $a$ and it requires one step and obviously it would scale with input $n$. Then, we divide the variable by 2 and check whether it is less than 1 or not. This process could take $\lceil 2\log n \rceil$ steps and the multiplier 2 means both the division and check would take 1 step for each time. After $\log n$ divisions, we could always obtain a value which is between 1 and 2. The special case is when $n$ is a multiple of 2. In this case, the value after $\log n$ divisions is 1 and from the title, we know there is no need for more divisions. However, when $n$ is not a multiple of 2, the value would be larger than 1 but smaller then 2 and $\log n$ could be a float. We still need to do one more check and division. Hence, I always round up $\log n$. Finally, we still have to check whether the value is not larger than 1. And this time, we know that it would be less than 1, so it just jumps out of the while-loop.
+
+The time complexity is $O(\log n)$.
+\section{E2.9 Programming Project:The sweeping trapezoidation algorithm}
+\subsection{classify each obstacle vertex}
+Because each polygonal obstacle is described by a counter-clockwise sequence of vertices, the sequential three vertices could represent two segments, which intersects with each other at the second vertex. Also, I think it is important to assume that no obstacle segment is vertical, which means all x-coordinates of vertices are unique.
+\begin{itemize} %\itemize 是制作一个格式，一条一条的格式，编译见
+\item[1.] For polygon in all_polygons
+\item[2.] \mbox{}\phantom{AA} For vertices in polygon
+\item[3.] \mbox{}\phantom{AAAA}   Select the left and right vertices in the list
+\end{itemize}
+\section{E1.7 Programming:Polygons}
+\subsection{computeDistancePointToPolygon}
+First, I need to check whether the given point is inside the polygon or not. I could use a method described in the lecture before. That is if a point is inside a polygon, the number of intersection points should be an odd number, when I draw a vertical line downwards from the point. The following picture is for illustration.
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=6cm,width=10cm]{example.png}
+\caption{Illustration} \label{fig:example} %caption 即标题的意思
+\end{figure}
+The left example corresponds to the case when the point is inside the polygon and the middle one and the right one shows the other case. You can see from the figure that the number of intersection points is odd only when the point is inside the polygon. Hence, I could use this property to check it.
+
+In order to find the smallest distance from $q$ to the closest point in $P$(polygon), I could find all the smallest distances from $q$ to each edge of the polygon. There are two possible cases:the point that makes the distance smallest is one of endpoints of or on the edge. Because the closest point in $P$ must be on the boundary of the polygon, the smallest one among all the smallest distances from $q$ to each edge is indeed the smallest distance from $q$ to the polygon. When I implement the function, I could use the functions and the codes I have already built for the homework1. The special cases involve when some of the edges are vertical or horizontal because I have to use another way to obtain the distance. However, it is easier than the one I use for the general cases.
+\subsection{computeTangentVectorToPolygon}
+From the above section, I already have shown how to decide $q$ is closest to a segment of the polygon or a vertex.
+
+For the case(i), what I need to do next is to find the directional vector of that segment. Since $u$ is parallel to the segment, they would have the same directional vector(up to a scale).
+
+For the case(ii), what I need to do next is to connect $q$ and the vertex and compute the slope of the new segment. Because $u$ is orthogonal to the new segment and its slope is known, I could obtain the directional vector of $u$ easily(up to a scale).
+
+Finally, as the title requires, I need to normalize the vector and make it lie in the counter-clockwise direction(remove the effect of the scale and the sign).
+\subsection{Verification}
+I change the input and check whether the results are right.
+\begin{figure}[H]
+\centering
+\begin{minipage}[c]{0.30\textwidth}
+\centering
+\includegraphics[height=3.2cm,width=6cm]{case111.png}
+\end{minipage}%
+\begin{minipage}[c]{0.30\textwidth}
+\centering
+\includegraphics[height=3.2cm,width=6cm]{case1.png}
+\end{minipage}
+\caption{Codes and visualization of the polygon} \label{fig:case1}
+\end{figure}
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=4cm,width=16cm]{case11.png}
+\caption{Results} \label{fig:case11} %caption 即标题的意思
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}[c]{0.30\textwidth}
+\centering
+\includegraphics[height=3.2cm,width=6cm]{case222.png}
+\end{minipage}%
+\begin{minipage}[c]{0.30\textwidth}
+\centering
+\includegraphics[height=3.2cm,width=6cm]{case2.png}
+\end{minipage}
+\caption{Codes and visualization of the polygon} \label{fig:case2}
+\end{figure}
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=4cm,width=16cm]{case22.png}
+\caption{Results} \label{fig:case22} %caption 即标题的意思
+\end{figure}
+\begin{figure}[H]
+\centering
+\begin{minipage}[c]{0.30\textwidth}
+\centering
+\includegraphics[height=3.2cm,width=6cm]{case333.png}
+\end{minipage}%
+\begin{minipage}[c]{0.30\textwidth}
+\centering
+\includegraphics[height=3.2cm,width=6cm]{case3.png}
+\end{minipage}
+\caption{Codes and visualization of the polygon} \label{fig:case3}
+\end{figure}
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=4cm,width=16cm]{case33.png}
+\caption{Results} \label{fig:case33} %caption 即标题的意思
+\end{figure}
+From the above three figures, the results are all right. The input points in each figure corresponds to different special cases and the function could still work.
+\end{document}
+% ----- End of Document Body -----

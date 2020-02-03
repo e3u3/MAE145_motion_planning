@@ -1,0 +1,218 @@
+\documentclass[a4paper, 11pt]{article}
+% ----- Loading the Package MCMthesis -----
+% -----           v 5.01-L            -----
+% `tcn' is short for `Team Control Number'.
+% You should fill your tcn after the equal sign following tcn.
+% The option `sheet' contorls weather the summary sheet
+% will appear.
+% The option `abstract' controls weather the abstract
+% will appear in the title-page.
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{diagbox}
+\usepackage{color}
+% ----- Question Mark -----
+% ----- Fonts settings -----
+% You may need to install the font files, if it's needed.
+% Disable it, if you don't want this font.
+\usepackage{palatino}
+\usepackage{geometry}% 能设置页边距
+\usepackage{setspace}% 能设置行距
+\usepackage{graphicx} %插入图形宏包
+\usepackage{float} %与插入图形有关 禁止图表的浮动[H]
+% ----- Set the skip betweent the paragraphics -----
+\setlength\parskip{.5\baselineskip}
+\setcounter{tocdepth}{4}
+% ----- The name of Abstract ------
+\providecommand{\abstractname}{\relax} % <-- Do not modify here.
+\renewcommand{\abstractname}{\Large Abstract} % <-- Modify here, if needed.
+% -----------------------------------
+% ===== The Title of Your Paper =====
+% -----------------------------------
+\newtheorem{law}{Law} %law 表明定理的名字，在输出中不显示，Law 表明定理的真实名字，在输出中显示 名称的替代？
+\newtheorem{jury}[law]{Jury} %表明以jury 为名称的定理与law 定理按同样顺序编号
+\newtheorem{mur}{Murphy}[section] %[section] 使加入的定理的编号与当前节链接
+\title{Solutions for HW3}
+% ---------------------------------------
+% ===== The Author(s) of Your Paper =====
+% ---------------------------------------
+\author{Yunhai Han}
+% ----------------
+% ===== Time =====
+% ----------------
+%首先 \begin{item} 是输出标号段落内容   \cite{} 能标号
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\begin{document}
+% Abstract should be put before `\maketitle'
+\maketitle
+\pagestyle{empty}
+% Generate the Table of Contents, if it's needed.
+% \tableofcontents
+% \newpage
+% The body of your paper
+
+%====================== 问题介绍====================================
+\section{E2.3 The several bridges of a city}
+\subsection{i}
+From the hint, I know that for this part, I am allowed to connect two nodes with multiple edges. Hence, there are four vertices and seven edges.
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=8cm,width=12cm]{1.png}
+\caption{Illustration of lands and bridges} \label{fig:1} %caption 即标题的意思
+\end{figure}
+From the above figure, the four different circles represent the four masses of land and the seven edges represent the seven bridges.
+\subsection{ii}
+If there exist such a path that walk through the vertex and crosses each edge exactly once, the path could be named \textbf{Euler Path}. If we want to examine whether there exist an euler path or not, I need to introduce the concept of degree of vertex. The degree of vertex could be defined as the number of edges which has that vertex as an endpoint.
+
+In this case, we can never find the desired path, the reason is very simple:there are more than two vertices the degrees of which are odd numbers. I could give a quick explanation:
+
+Assume we have more than two such vertices, each time we arrive and leave one of these vertices, two edges emanating from the vertex are used. If the degree of a vertex is an odd number and we want to cross each edge exactly once, the only possible case is when we start from this vertex and end at the other one. Because, if we leave the vertex and never come back(start point), the pair I describe above could be broken and one extra edge is not necessary, which means the degree of the start point could be an odd number. Also, if we end at such a vertex, we will never leave it again and leave one more edge. That is why more then two vertices with degree an odd number could infer that there is no Euler path in the graph.
+
+From the figure \ref{fig:case33}, it is obvious that all the four vertices have the odd numbers of degree. Hence, it is impossible to find the desired path.
+\subsection{iii}
+If we are allowed to add one more edge into this graph connecting any two points we want, it is possible to find such a path if the single addition edge is located between the Land1 and Land4. Because there are only two vertices which have odd numbers of degree. I draw the modified graph and the Euler path below:
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=8cm,width=12cm]{2.png}
+\caption{Modified graph and the desired path} \label{fig:2} %caption 即标题的意思
+\end{figure}
+I use a sequence of continuous numbers to mark the eight different edges, indicating the order of the desired path. If we follow this order, we could walk through the city and cross each edge exactly once.
+\section{E2.7 The BFS algorithm for disconnected graphs}
+From the lecture, the definition of the graph connectivity is: A graph is connected if every two nodes are path-connected, which means we could always find at least one possible path between any two nodes.
+\subsection{i}
+f we could find a method to verify that every two nodes are connected, we could easily say that the graph is connected.
+From the lecture, we could use BFS algorithm to find the shortest path between any two nodes, and this algorithm would return false if there dose't exist such a path. Hence, we could implement this algorithm multiple times to find all the possible test path between any two nodes. Suppose there is $m$ nodes in the graph($m \ge 1$), the stupidest way is to implement it for $\sum_{i}^{m}$ times. In this case, we would verity whether the first node in the nodes list connected to any other nodes in the left $m-1$ nodes. Then, we could simply start from the next node the list and verify the connectivity between this node and any other nodes behind it in the list. Finally, we would implement is for $\sum_{i}^{m}$ times and fulfill the goal.
+
+Though it works, it would waste lots of time because most of the verifications are not necessary. So, I could change the strategy and find a much more efficient method. Here, I give a brief description of the new method:
+\begin{itemize}
+\item Create an identity matrix and the size of it is $m*m$.
+\item We could randomly select a node in the node list, and find all the nodes that connect the selected node. Let say we find k nodes for this time.
+\item Suppose the index of the original node is $i$ in the node list, and the indexes of all the found nodes are $i^1,i^2...i^k$. We then set these entries in the matrix $(i,i^1) and (i^1,i),$
+    
+    $ (i,i^2) and (i^2,i)...(i,i^k) and (i^k,i)$ to 1.
+\item for each node in $i^1,i^2...i^k$, we find all the nodes that connect to them respectively. I take the node $i^1$ as an example. Obviously, its parent node is $i$ and I assume it connect to $m$ nodes including its parent node. 
+\item for each node, I check whether the entry in the Identity matrix at $(i^1,(i^1)^1) and ((i^1)^1,i^1),$
+
+$(i^1,(i^1)^2) and ((i^1)^1,i^1),...(i^1,(i^1)^m) and ((i^1)^m,i^1)$ is zero or not respectively. If the entry is zero, I would set it as 1 and if it's not, I would unchange it. In this case, there are $2*(m-1)$ entries which are zero, so I set them to one. Also, you can see that the entries at $(i^1,i) and (i,i^1)$ has already been set to 1 in the previous procedure, so I don't have to change them. After that, since I know its parent node and its child nodes, I also could set the entries at $(i,(i^1)^1) and ((i^1)^1,i),$
+ 
+ $(i,(i^1)^2) and ((i^1)^2,i),...(i,(i^1)^m) and ((i^1)^m,i)$  to 1. Of course, if the entries has already been 1, I don't have to change them.
+\item I would repeat this $k$ times for all the $k$ nodes I found in the previous iteration.
+\item Obviously, I know that right now I have already found the child nodes of the node $i,i^1,i^2,...,i^k$, respectively. So in the next iteration, I would not process these nodes even though some of them would be the child node of the others. It is really useful to help us save lots of time. For the left child nodes, they just appear for the first time, I would find the child nodes of them in the next iteration and do the above procedure again.
+\item When we should stop doing this is very straightforward:if during an iteration, there is no entry being set to 1, we could stop this.
+\item We check whether all the entries in the matrix are 1 or not. If they are all 1s, it means any two points are connected, so the graph is connected. Otherwise, the graph is not connected.
+\end{itemize}
+
+Here is the pseudocode:
+\begin{lstlisting}
+Input: a graph G(m nodes) and a start point k(randomly selected)
+Output: true->the graph is connected; false->the graph is disconnected
+1.Create a parent node list P and insert k into this list
+2.Create a parent node list P_store and insert k into this list
+3.Create a child nodes list C
+4.Create a Identity matrix(m*m) M
+5.find all the nodes connected to k, and put them into a list, then insert the list into C
+6.create a integer T, set it as 1
+7.while(T!=0):
+      T=0
+      for each i in P:
+          for each node j in C(i):
+             if(j is not in P_store):
+             if(M(i,j)!=0)
+                set M(i,j) and M(j,i) to 1
+                find all the nodes connected to j and put them into a list, then insert the list into C
+	  insert j into P_store
+                insert j into P
+                T+=1
+          remove C(i) in C
+          remove i in P
+8.check whether the sum of all the entries in the matrix is equal to m*m or not:
+9:yes->return true, no->return false
+\end{lstlisting}
+\subsection{ii}
+If the graph is connected, I think it only has one connected components which is itself. If it is disconnected, it may have more than one connected components.
+
+First, we would have to check whether the graph is connected or not. we could use the method described above. In order to find the connected components, I
+ could the matrix I defined before because it could provide us with enough information to figure out the number connected components.
+When the graph is disconnected, the sum of all the entries in the matrix is not equal to $m^2$. So, there would exist some entries in each row which are zero. I draw a figure to illustrate it:
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=8cm,width=12cm]{3.png}
+\caption{An example} \label{fig:3} %caption 即标题的意思
+\end{figure}
+The matrix representing such a graph should be like this(assume the start point is node 1):
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=8cm,width=12cm]{4.png}
+\caption{The corresponding matrix} \label{fig:4} %caption 即标题的意思
+\end{figure}
+If we divide the matrix into two small matrix:one is the 4*4 matrix which contains all the 1s in the original large matrix, the other one is the 6*6 identity matrix. For this 4*4 matrix, it corresponds to the connected subgraph in the original matrix and the indexes are 1,3,4,5. Then I change the start point,for example, 2, and implement this algorithm again in the 6*6 matrix. For the real implementation, we have to pay a little attention to the index conversion(the indexes 2,6,7,8,9,10 should be converted into new set of indexes like 1,2,3,4,5,6). Here is the another matrix:
+\begin{figure}[H] %[H]表明图片输出在指定想要的位置（即代码处的位置），不然图片输出此页最上方，
+\centering
+\includegraphics[angle=0,height=8cm,width=12cm]{5.png}
+\caption{The corresponding matrix} \label{fig:5} %caption 即标题的意思
+\end{figure}
+This time, we could extract the columns 1,2,5 and divide the 6*6 matrix into two 3*3 matrices:one is the identity matrix and the other one contains all the 1s. For the same reason, the 3*3 submatrix correspond to the connected subgraph and the indexes are 1,2,5. In the figure \ref{fig:4}, these indexes represent the node 2,6,9.
+
+We could change the start point again and this time, there is only one 3*3 matrix left with all the 1s and it represent the subgraph with node 7,8,10.
+
+Hence, for this graph, there are totally three subgraphs, which means the number of connected components is three.
+
+Here is the pseudocode:
+\begin{lstlisting}
+Input:the matrix M obtained from the part i.
+output:the number of connected components
+1.Set k equal to 0.
+2.while(M is not an identity matrix):
+3.  extract the columns and rows which contain 1s off the diagonal
+4.  divide M into two smaller matrix.
+5.  k+=1
+6.  set the smaller identity matrix as M
+7   if(the size of M is 1*1):
+        break;
+8.  change the start point and implement the algorithm described in part i again
+\end{lstlisting}
+\subsection{iii}
+For this part, what I need to do it to just add one simple function into the algorithm in the part iii: each time I extract a smaller ones matrix, we count its size and this is the number of nodes in each connected component.
+
+The pseudocode is nearly the same as the previous one:
+\begin{lstlisting}
+Input:the matrix M obtained from the part i.
+output:the number of connected components and the number of nodes in each connected component
+0.Create an empty list L
+1.Set k equal to 0.
+2.while(M is not an identity matrix):
+3.  extract the columns and rows which contain 1s off the diagonal
+4.  divide M into two smaller matrix.
+5.  k+=1
+6.  insert the size of the ones matrix into L
+7.  set the smaller identity matrix as M
+8   if(the size of M is 1*1):
+        break;
+9.  change the start point and implement the algorithm described in part i again
+\end{lstlisting}
+\section{E2.8 Programming:BFS algorithm}
+
+\end{document}
+% ----- End of Document Body -----
