@@ -2,7 +2,7 @@ import numpy as np
 import scipy.stats
 import matplotlib.pyplot as plt
 from read_data import read_world, read_sensor_data
-
+from python_program_p2 import predict
 #add random seed for generating comparable pseudo random numbers
 np.random.seed(123)
 
@@ -42,7 +42,6 @@ def plot_state(particles, landmarks, map_limits):
     plt.axis(map_limits)
 
     plt.pause(0.01)
-
 def initialize_particles(num_particles, map_limits):
     # randomly initialize the particles inside the map limits
 
@@ -97,7 +96,7 @@ def sample_motion_model(odometry, particles):
     # Samples new particle positions, based on old positions, the odometry
     # measurements and the motion noise 
     # (probabilistic motion models slide 27)
-
+    # odometry data
     delta_rot1 = odometry['r1']
     delta_trans = odometry['t']
     delta_rot2 = odometry['r2']
@@ -107,12 +106,15 @@ def sample_motion_model(odometry, particles):
 
     # generate new particle set after motion update
     new_particles = []
-    
-    '''your code here'''
-    '''***        ***'''
-
-
-
+    for particle in particles:
+        tmp = [particle['x'],particle['y'],particle['theta']]
+        u_t = [delta_rot1,delta_rot2,delta_trans]
+        tmp_1 = predict(tmp,u_t,noise)
+        particle = dict()
+        particle['x'] = tmp_1[0][0]
+        particle['y'] = tmp_1[1][0]
+        particle['theta'] = tmp_1[2][0]
+        new_particles.append(particle)
 
     return new_particles
 
@@ -124,37 +126,36 @@ def eval_sensor_model(sensor_data, particles, landmarks):
     # The employed sensor model is range only.
 
     sigma_r = 0.2
-
     #measured landmark ids and ranges
-    ids = sensor_data['id']
-    ranges = sensor_data['range']
 
     weights = []
-    
-    '''your code here'''
-    '''***        ***'''
 
-
-
-
-
+    ids = sensor_data['id']
+    ranges = sensor_data['range']
+    print(ids)
+    print(landmarks)
+    for particle in particles:
+        tmp_x = particle['x']
+        tmp_y = particle['y']
+        tmp_t = particle['theta']
+        p = 1
+        for i in range(0, len(ids)):
+            m_x = landmarks[ids[i]][0]
+            m_y = landmarks[ids[i]][1]
+            tmp_r = np.sqrt((m_x-tmp_x)**2+(m_y-tmp_y)**2)
+            p *= 1/np.sqrt(2*np.pi * 0.2**2) * np.exp(-(ranges[i] - tmp_r)**2 / (2 * 0.2**2))
+        weights.append(p)
     #normalize weights
     normalizer = sum(weights)
     weights = weights / normalizer
-
     return weights
 
 def resample_particles(particles, weights):
     # Returns a new set of particles obtained by performing
     # stochastic universal sampling, according to the particle weights.
 
-    new_particles = []
-
-    '''your code here'''
-    '''***        ***'''
-
-
-
+    particle_list = np.arange(0, 1000)
+    new_particles = np.random.choice(particles, 1000, p = weights)
 
 
     return new_particles
@@ -162,23 +163,22 @@ def resample_particles(particles, weights):
 def main():
     # implementation of a particle filter for robot pose estimation
 
-    print "Reading landmark positions"
-    landmarks = read_world("../data/world.dat")
-
-    print "Reading sensor data"
-    sensor_readings = read_sensor_data("../data/sensor_data.dat")
-
+    print("Reading landmark positions")
+    landmarks = read_world("./data/world.dat")
+    #read the landmarks one time
+    print("Reading sensor data")
+    sensor_readings = read_sensor_data("./data/sensor_data.dat")
+    # read the sensor_data one time
     #initialize the particles
     map_limits = [-1, 12, 0, 10]
     particles = initialize_particles(1000, map_limits)
-
     #run particle filter
-    for timestep in range(len(sensor_readings)/2):
+    for timestep in range(int(len(sensor_readings)/2)): #update times
 
         #plot the current state
         plot_state(particles, landmarks, map_limits)
-
         #predict particles by sampling from motion model with odometry info
+        #first time
         new_particles = sample_motion_model(sensor_readings[timestep,'odometry'], particles)
 
         #calculate importance weights according to sensor model
